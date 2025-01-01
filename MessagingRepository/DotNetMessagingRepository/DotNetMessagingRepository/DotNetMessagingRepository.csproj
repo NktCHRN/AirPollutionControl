@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>AirPollutionControl.Backend.DotNetMessagingRepository</PackageId>
+    <Authors>AirPollutionControl's Team</Authors>
+    <Product>AirPollutionControl</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend/tree/master</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="RequestReplies\" />
+  </ItemGroup>
+
+</Project>
