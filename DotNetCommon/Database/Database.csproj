@@ -4,6 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>AirPollutionControl.Backend.DotNetCommon.Database</PackageId>
+    <Authors>AirPollutionControl's Team</Authors>
+    <Product>AirPollutionControl</Product>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
