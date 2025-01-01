@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>AirPollutionControl.Backend.DotNetCommon</PackageId>
+    <Authors>AirPollutionControl's Team</Authors>
+    <Product>AirPollutionControl</Product>
+    <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>
