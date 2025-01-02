@@ -3,9 +3,12 @@ using AccountService.Api.Contracts.Responses.User;
 using AccountService.Application.Features.User.Login;
 using AccountService.Application.Features.User.RefreshTokens;
 using AccountService.Application.Features.User.Register;
+using AccountService.Application.Features.User.RevokeAllTokens;
+using AccountService.Application.Features.User.RevokeToken;
 using AspNetCore.Contracts;
 using AspNetCore.Controllers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountService.Api.Controllers;
@@ -73,5 +76,37 @@ public class UserController : BaseController
         var dto = await mediator.Send(command);
 
         return OkResponse(new TokensResponse(dto.AccessToken, dto.RefreshToken));
+    }
+
+    [Authorize]
+    [HttpPost("tokens/revoke")]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest request)
+    {
+        var command = new RevokeTokenCommand(request.RefreshToken);
+
+        await mediator.Send(command);
+
+        return NoContentResponse();
+    }
+
+    [Authorize]
+    [HttpPost("tokens/revoke-all")]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> RevokeAllActiveTokens()
+    {
+        var command = new RevokeAllTokensCommand();
+
+        await mediator.Send(command);
+
+        return NoContentResponse();
     }
 }
