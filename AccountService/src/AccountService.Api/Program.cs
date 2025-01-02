@@ -1,6 +1,15 @@
+using AccountService.Api;
+using AccountService.Application;
+using AccountService.Domain;
+using AccountService.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services
+    .AddDomainServices()
+    .AddApplicationServices(builder.Configuration)
+    .AddInfrastructureServices(builder.Configuration)
+    .AddWebApiServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -7,6 +7,7 @@ using DotNetMessagingRepository.Common;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using DomainAbstractions.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccountService.Application.Features.User.Register;
 public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegisteredDto>
@@ -22,10 +23,26 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
 
     public async Task<UserRegisteredDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var username = !string.IsNullOrWhiteSpace(request.Email) ? request.Email : request.PhoneNumber;
-
         var agglomeration = await agglomerationRepository.FirstOrDefaultAsync(new AgglomerationByIdSpec(request.AgglomerationId))
             ?? throw new EntityNotFoundException("Agglomeration was not found");
+
+        if (!string.IsNullOrEmpty(request.Email))
+        {
+            request.Email = request.Email.Trim();
+            var userByEmail = await userManager.FindByEmailAsync(request.Email);
+            if (userByEmail is not null)
+            {
+                throw new EntityAlreadyExistsException("User with this email is already registered");
+            }
+        }
+        if (!string.IsNullOrEmpty(request.PhoneNumber))
+        {
+            var userByPhoneNumber = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber);
+            if (userByPhoneNumber is not null)
+            {
+                throw new EntityAlreadyExistsException("User with this phone number is already registered");
+            }
+        }
 
         var user = new Domain.Models.User
         {
@@ -37,7 +54,7 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
             Agglomeration = agglomeration,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
-            UserName = username,
+            UserName = Guid.NewGuid().ToString(),
         };
 
         var userCreationResults = await userManager.CreateAsync(user, request.Password);
