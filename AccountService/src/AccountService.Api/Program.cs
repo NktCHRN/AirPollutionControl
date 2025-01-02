@@ -2,8 +2,10 @@ using AccountService.Api;
 using AccountService.Application;
 using AccountService.Domain;
 using AccountService.Infrastructure;
+using AccountService.Infrastructure.Persistence;
 using AspNetCore.Middlewares;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("DEV_CORS");
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
 }
 else
 {
