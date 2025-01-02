@@ -19,4 +19,8 @@
     <Folder Include="Contracts\Responses\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AccountService.Infrastructure\AccountService.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

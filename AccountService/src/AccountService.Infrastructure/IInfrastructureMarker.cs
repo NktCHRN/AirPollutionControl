@@ -1,6 +1,4 @@
 ﻿namespace AccountService.Infrastructure;
-
-public class Class1
+public interface IInfrastructureMarker
 {
-
 }

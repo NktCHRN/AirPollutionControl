@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <PackageId>AirPollutionControl.Backend.DotNetCommon.AspNetCore</PackageId>
+	  <Authors>AirPollutionControl's Team</Authors>
+	  <Product>AirPollutionControl</Product>
+	  <PackageProjectUrl></PackageProjectUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend</RepositoryUrl>
+	  <Version>1.0.0</Version>
+  </PropertyGroup>
+
+</Project>

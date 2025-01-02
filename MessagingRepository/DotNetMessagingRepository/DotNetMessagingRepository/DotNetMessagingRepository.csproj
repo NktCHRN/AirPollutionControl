@@ -10,6 +10,7 @@
     <Product>AirPollutionControl</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend/tree/master</RepositoryUrl>
+	  <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

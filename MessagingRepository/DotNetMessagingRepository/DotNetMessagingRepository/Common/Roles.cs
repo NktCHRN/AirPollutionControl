@@ -8,4 +8,5 @@ public sealed class Roles
     public const string AgglomerationAdmin = nameof(AgglomerationAdmin);
     public const string CountryGovernmentMember = nameof(CountryGovernmentMember);
     public const string CountryAdmin = nameof(CountryAdmin);
+    public const string GlobalAdmin = nameof(GlobalAdmin);
 }

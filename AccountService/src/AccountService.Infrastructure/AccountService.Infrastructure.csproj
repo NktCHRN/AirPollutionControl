@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AirPollutionControl.Backend.DotNetCommon.Database" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AccountService.Application\AccountService.Application.csproj" />
+  </ItemGroup>
+
 </Project>

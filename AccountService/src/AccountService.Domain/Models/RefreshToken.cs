@@ -1,5 +1,5 @@
 ﻿namespace AccountService.Domain.Models;
-public sealed class RefreshToken
+public class RefreshToken
 {
     public Guid Id { get; set; }
 
