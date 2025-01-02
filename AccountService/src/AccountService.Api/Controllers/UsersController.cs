@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace AccountService.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class UserController : BaseController
+public class UsersController : BaseController
 {
     private readonly IMediator mediator;
 
-    public UserController(IMediator mediator)
+    public UsersController(IMediator mediator)
     {
         this.mediator = mediator;
     }
