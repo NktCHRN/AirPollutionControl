@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AirPollutionControl.Backend.DotNetCommon.Database" Version="1.0.0" />
+    <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

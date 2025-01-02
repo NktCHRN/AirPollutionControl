@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AirPollutionControl.Backend.DotNetCommon.Application" Version="1.0.3" />
+    <PackageReference Include="AirPollutionControl.Backend.DotNetMessagingRepository" Version="1.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
   </ItemGroup>
 
