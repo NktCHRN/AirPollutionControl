@@ -14,11 +14,13 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
 {
     private readonly UserManager<Domain.Models.User> userManager;
     private readonly IRepository<Agglomeration> agglomerationRepository;
+    private readonly TimeProvider timeProvider;
 
-    public RegisterHandler(UserManager<Domain.Models.User> userManager, IRepository<Agglomeration> agglomerationRepository)
+    public RegisterHandler(UserManager<Domain.Models.User> userManager, IRepository<Agglomeration> agglomerationRepository, TimeProvider timeProvider)
     {
         this.userManager = userManager;
         this.agglomerationRepository = agglomerationRepository;
+        this.timeProvider = timeProvider;
     }
 
     public async Task<UserRegisteredDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -29,16 +31,16 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
         if (!string.IsNullOrEmpty(request.Email))
         {
             request.Email = request.Email.Trim();
-            var userByEmail = await userManager.FindByEmailAsync(request.Email);
-            if (userByEmail is not null)
+            var emailIsTaken = await userManager.Users.AnyAsync(u => u.Email == request.Email, cancellationToken: cancellationToken);
+            if (emailIsTaken)
             {
                 throw new EntityAlreadyExistsException("User with this email is already registered");
             }
         }
         if (!string.IsNullOrEmpty(request.PhoneNumber))
         {
-            var userByPhoneNumber = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber);
-            if (userByPhoneNumber is not null)
+            var phoneNumberIsTaken = await userManager.Users.AnyAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken: cancellationToken);
+            if (phoneNumberIsTaken)
             {
                 throw new EntityAlreadyExistsException("User with this phone number is already registered");
             }
@@ -55,6 +57,7 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
             UserName = Guid.NewGuid().ToString(),
+            CreatedAt = timeProvider.GetUtcNow(),
         };
 
         var userCreationResults = await userManager.CreateAsync(user, request.Password);
