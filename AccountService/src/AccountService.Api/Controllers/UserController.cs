@@ -1,6 +1,7 @@
 ﻿using AccountService.Api.Contracts.Requests.User;
 using AccountService.Api.Contracts.Responses.User;
 using AccountService.Application.Features.User.Login;
+using AccountService.Application.Features.User.RefreshTokens;
 using AccountService.Application.Features.User.Register;
 using AspNetCore.Contracts;
 using AspNetCore.Controllers;
@@ -10,11 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace AccountService.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : BaseController
+public class UserController : BaseController
 {
     private readonly IMediator mediator;
 
-    public UsersController(IMediator mediator)
+    public UserController(IMediator mediator)
     {
         this.mediator = mediator;
     }
@@ -45,8 +46,9 @@ public class UsersController : BaseController
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -55,6 +57,21 @@ public class UsersController : BaseController
 
         var dto = await mediator.Send(command);
 
-        return OkResponse(new LoginDto(dto.AccessToken, dto.RefreshToken));
+        return OkResponse(new LoginResponse(dto.AccessToken, dto.RefreshToken));
+    }
+
+    [HttpPost("tokens/refresh")]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokensRequest request)
+    {
+        var command = new RefreshTokensCommand(request.AccessToken, request.RefreshToken);
+
+        var dto = await mediator.Send(command);
+
+        return OkResponse(new TokensResponse(dto.AccessToken, dto.RefreshToken));
     }
 }

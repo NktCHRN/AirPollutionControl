@@ -53,7 +53,7 @@ public sealed class LoginHandler : IRequestHandler<LoginCommand, LoginDto>
         await refreshTokenRepository.AddAsync(new RefreshToken
         {
             Token = refreshToken,
-            UserId = user.Id,
+            UserId = user!.Id,
             ExpiryTime = timeProvider.GetUtcNow().AddDays(tokenProvidersOptions.RefreshTokenLifetimeInDays)
         }, cancellationToken);
 
