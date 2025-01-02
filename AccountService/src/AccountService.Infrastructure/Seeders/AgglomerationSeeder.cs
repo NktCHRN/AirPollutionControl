@@ -36,7 +36,7 @@ public sealed class AgglomerationSeeder : IAgglomerationSeeder
     public async Task SeedAsync(ApplicationDbContext dbContext, CancellationToken ct)
     {
         var agglomerations = Agglomerations;
-        var countries = await dbContext.Countries.Include(c => c.Agglomerations).Where(c => agglomerations.Select(a => a.countryName).Contains(c.Name)).ToListAsync();
+        var countries = await dbContext.Countries.Include(c => c.Agglomerations).Where(c => agglomerations.Select(a => a.countryName).Contains(c.Name)).ToListAsync(cancellationToken: ct);
 
         foreach (var (agglomeration, countryName) in agglomerations)
         {
@@ -47,7 +47,7 @@ public sealed class AgglomerationSeeder : IAgglomerationSeeder
             }
 
             agglomeration.Country = country;
-            await dbContext.AddAsync(agglomeration);
+            await dbContext.AddAsync(agglomeration, ct);
         }
 
         await dbContext.SaveChangesAsync(ct);
