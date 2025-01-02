@@ -1,5 +1,6 @@
 ﻿using AccountService.Domain.Models;
 using Database;
+using DomainAbstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Ignore<BaseDomainEvent>();
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IInfrastructureMarker))!);
         modelBuilder.ApplySoftDeleteFilter();
     }
