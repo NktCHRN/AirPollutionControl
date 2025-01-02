@@ -51,6 +51,8 @@ public static class DependencyInjection
                     .AddScoped<SoftDeleteInterceptor>()
                     .AddScoped<DispatchDomainEventsInterceptor>()
                     .AddTransient<IRoleSeeder, RoleSeeder>()
+                                        .AddTransient<ICountrySeeder, CountrySeeder>()
+                                                            .AddTransient<IAgglomerationSeeder, AgglomerationSeeder>()
                     .AddDbContext<ApplicationDbContext>((sp, options)
                         => options
                             .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
@@ -58,14 +60,29 @@ public static class DependencyInjection
                             .UseSeeding((dbContext, _) =>
                             {
                                 var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-                                var seeder = sp.GetRequiredService<IRoleSeeder>();
-                                seeder.Seed(roleManager);
+                                var roleSeeder = sp.GetRequiredService<IRoleSeeder>();
+                                roleSeeder.Seed(roleManager);
+
+                                var applicationDbContext = (ApplicationDbContext)dbContext;
+                                var countrySeeder = sp.GetRequiredService<ICountrySeeder>();
+                                countrySeeder.Seed(applicationDbContext);
+
+                                var agglomerationSeeder = sp.GetRequiredService<IAgglomerationSeeder>();
+                                agglomerationSeeder.Seed(applicationDbContext);
                             })
                             .UseAsyncSeeding(async (dbContext, _, ct) =>
                             {
                                 var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-                                var seeder = sp.GetRequiredService<IRoleSeeder>();
-                                await seeder.SeedAsync(roleManager, ct);
+                                var roleSeeder = sp.GetRequiredService<IRoleSeeder>();
+                                await roleSeeder.SeedAsync(roleManager, ct);
+
+                                var applicationDbContext = (ApplicationDbContext)dbContext;
+                                var countrySeeder = sp.GetRequiredService<ICountrySeeder>();
+                                await countrySeeder.SeedAsync(applicationDbContext, ct);
+
+                                var agglomerationSeeder = sp.GetRequiredService<IAgglomerationSeeder>();
+                                await agglomerationSeeder.SeedAsync(applicationDbContext, ct);
+
                             }))
 
                     .AddScoped<ITransactionHandler, TransactionHandler>()
