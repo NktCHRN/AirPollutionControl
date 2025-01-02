@@ -1,6 +1,5 @@
-﻿namespace AccountService.Api.Contracts.Responses.User;
-
-public sealed record UserResponse
+﻿namespace AccountService.Application.Features.User.Get;
+public sealed record UserDto
 {
     public required Guid Id { get; set; }
     public required string FirstName { get; set; } = string.Empty;

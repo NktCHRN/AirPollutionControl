@@ -1,5 +1,6 @@
 ﻿using AccountService.Api.Contracts.Requests.User;
 using AccountService.Api.Contracts.Responses.User;
+using AccountService.Application.Features.User.Get;
 using AccountService.Application.Features.User.Login;
 using AccountService.Application.Features.User.RefreshTokens;
 using AccountService.Application.Features.User.Register;
@@ -108,5 +109,40 @@ public class UserController : BaseController
         await mediator.Send(command);
 
         return NoContentResponse();
+    }
+
+    [Authorize]
+    [HttpGet()]
+    [ProducesResponseType(typeof(ApiResponse<UserResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Get()
+    {
+        var command = new GetUserQuery();
+
+        var dto = await mediator.Send(command);
+
+        return OkResponse(new UserResponse
+        {
+            Id = dto.Id,
+            FirstName = dto.FirstName,
+            MiddleName = dto.MiddleName,
+            LastName = dto.LastName,
+            Patronymic = dto.Patronymic,
+            Birthday = dto.Birthday,
+            AgglomerationId = dto.AgglomerationId,
+            AgglomerationName = dto.AgglomerationName,
+            CountryId = dto.CountryId,
+            CountryName = dto.CountryName,
+            Email = dto.Email,
+            PhoneNumber = dto.PhoneNumber,
+            IsConfirmed = dto.IsConfirmed,
+            IsRestricted = dto.IsRestricted,
+            RestrictionEnd = dto.RestrictionEnd,
+            RestrictionNote = dto.RestrictionNote,
+            PositionName = dto.PositionName,
+            OrganizationName = dto.OrganizationName
+        });
     }
 }
