@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Database;
 public sealed class TransactionHandler : ITransactionHandler
 {
-    private DbContext dbContext;
+    private readonly DbContext dbContext;
     private IDbContextTransaction? currentTransaction;
     private readonly ILogger<TransactionHandler> logger;
 

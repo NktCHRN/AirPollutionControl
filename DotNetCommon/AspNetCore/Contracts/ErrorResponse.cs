@@ -1,5 +1,2 @@
 ﻿namespace AspNetCore.Contracts;
-public record ErrorResponse
-{
-    public string ErrorMessage { get; set; } = string.Empty;
-}
+public record ErrorResponse(string ErrorMessage);

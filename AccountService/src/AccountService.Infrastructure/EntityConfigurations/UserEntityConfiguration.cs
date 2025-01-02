@@ -24,5 +24,7 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         builder.Navigation(u => u.Agglomeration)
             .AutoInclude();
+
+        builder.HasIndex(e => e.PhoneNumber);
     }
 }

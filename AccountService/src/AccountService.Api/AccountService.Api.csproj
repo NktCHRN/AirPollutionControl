@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="Contracts\Enums\" />
-    <Folder Include="Contracts\Responses\" />
   </ItemGroup>
 
   <ItemGroup>

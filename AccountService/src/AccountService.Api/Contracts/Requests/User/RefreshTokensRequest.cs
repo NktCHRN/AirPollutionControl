@@ -1,5 +1,3 @@
 ﻿namespace AccountService.Api.Contracts.Requests.User;
 
-public class RefreshTokensRequest
-{
-}
+public sealed record RefreshTokensRequest(string AccessToken, string RefreshToken);
