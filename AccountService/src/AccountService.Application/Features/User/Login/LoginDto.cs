@@ -1,10 +1,2 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AccountService.Application.Features.User.Login;
-internal class LoginDto
-{
-}
+﻿namespace AccountService.Application.Features.User.Login;
+public sealed record LoginDto(string AccessToken, string RefreshToken);

@@ -1,5 +1,6 @@
 ﻿using AccountService.Api.Contracts.Requests.User;
 using AccountService.Api.Contracts.Responses.User;
+using AccountService.Application.Features.User.Login;
 using AccountService.Application.Features.User.Register;
 using AspNetCore.Contracts;
 using AspNetCore.Controllers;
@@ -21,6 +22,7 @@ public class UsersController : BaseController
     [HttpPost("register")]
     [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -40,5 +42,19 @@ public class UsersController : BaseController
         var dto = await mediator.Send(command);
 
         return OkResponse(new AccountRegisteredResponse(dto.Id, dto.Name, dto.Email, dto.PhoneNumber));
+    }
+
+    [HttpPost("login")]
+    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var command = new LoginCommand(request.Login, request.Password);
+
+        var dto = await mediator.Send(command);
+
+        return OkResponse(new LoginDto(dto.AccessToken, dto.RefreshToken));
     }
 }

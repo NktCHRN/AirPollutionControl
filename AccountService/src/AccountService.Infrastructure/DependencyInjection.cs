@@ -12,6 +12,8 @@ using AccountService.Infrastructure.Repositories;
 using Database;
 using AccountService.Infrastructure.Abstractions;
 using AccountService.Infrastructure.Seeders;
+using AccountService.Infrastructure.TokensProviders;
+using AccountService.Application.Abstractions;
 
 namespace AccountService.Infrastructure;
 public static class DependencyInjection
@@ -37,10 +39,8 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        //services.Configure<JwtBearerConfigOptions>(configuration.GetRequiredSection("JwtBearer"));
-        //services.AddSingleton<IJwtTokenProvider, JwtTokenProvider>();
-        //services.Configure<TokenProvidersOptions>(configuration.GetRequiredSection("TokenProvidersOptions"));
-        //services.AddScoped<IAccountService, AccountService>();
+        services.Configure<JwtBearerConfigOptions>(configuration.GetRequiredSection("JwtBearer"));
+        services.AddSingleton<IJwtTokenProvider, JwtTokenProvider>();
 
         return services;
     }

@@ -2,7 +2,6 @@
 public interface ICurrentApplicationUserService
 {
     Guid? Id { get; }
-    string? UserName { get; }
     string? Email { get; }
     string? PhoneNumber { get; }
     string? FullName { get; }

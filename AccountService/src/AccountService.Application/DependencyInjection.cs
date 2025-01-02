@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Application.Behaviors;
 using FluentValidation;
+using AccountService.Application.Options;
 
 namespace AccountService.Application;
 public static class DependencyInjection
@@ -16,6 +17,7 @@ public static class DependencyInjection
                 .RegisterServicesFromAssembly(typeof(IApplicationAssemblyMarker).Assembly)
                 .AddOpenBehavior(typeof(ValidationBehavior<,>))
                 .AddOpenBehavior(typeof(TransactionalBehavior<,>));
-            });
+            })
+            .Configure<TokenProvidersOptions>(configuration.GetRequiredSection("TokenProvidersOptions"));
     }
 }

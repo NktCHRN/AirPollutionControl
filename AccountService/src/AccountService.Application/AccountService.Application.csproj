@@ -10,6 +10,7 @@
     <PackageReference Include="AirPollutionControl.Backend.DotNetCommon.Application" Version="1.0.4" />
     <PackageReference Include="AirPollutionControl.Backend.DotNetMessagingRepository" Version="1.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.0" />
   </ItemGroup>
 

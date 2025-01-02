@@ -6,4 +6,6 @@ public class RefreshToken
     public string Token { get; set; } = string.Empty;
 
     public DateTimeOffset ExpiryTime { get; set; }
+
+    public Guid UserId { get; set; }
 }

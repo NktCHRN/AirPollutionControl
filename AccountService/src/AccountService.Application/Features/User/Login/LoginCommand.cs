@@ -3,6 +3,5 @@ using MediatR;
 
 namespace AccountService.Application.Features.User.Login;
 [TransactionalCommand]
-public sealed record LoginCommand : IRequest<LoginDto>
-{
-}
+public sealed record LoginCommand(string Login, string Password) : IRequest<LoginDto>;
+
