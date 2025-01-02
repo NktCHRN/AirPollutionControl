@@ -11,16 +11,17 @@
 	  <PackageProjectUrl></PackageProjectUrl>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend</RepositoryUrl>
-	  <Version>1.0.2</Version>
+	  <Version>1.0.3</Version>
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AirPollutionControl.Backend.DotNetMessagingRepository" Version="1.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DomainAbstractions\DomainAbstractions.csproj" />
+	  <ProjectReference Include="..\Application\Application.csproj" />
 	</ItemGroup>
-
+	
 </Project>
