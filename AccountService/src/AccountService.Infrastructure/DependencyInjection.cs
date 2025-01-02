@@ -10,6 +10,8 @@ using System.Text.Json;
 using Application.Abstractions;
 using AccountService.Infrastructure.Repositories;
 using Database;
+using AccountService.Infrastructure.Abstractions;
+using AccountService.Infrastructure.Seeders;
 
 namespace AccountService.Infrastructure;
 public static class DependencyInjection
@@ -48,10 +50,24 @@ public static class DependencyInjection
         return services
                     .AddScoped<SoftDeleteInterceptor>()
                     .AddScoped<DispatchDomainEventsInterceptor>()
+                    .AddTransient<IRoleSeeder, RoleSeeder>()
                     .AddDbContext<ApplicationDbContext>((sp, options)
                         => options
                             .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
-                            .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>()))
+                            .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>())
+                            .UseSeeding((dbContext, _) =>
+                            {
+                                var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                                var seeder = sp.GetRequiredService<IRoleSeeder>();
+                                seeder.Seed(roleManager);
+                            })
+                            .UseAsyncSeeding(async (dbContext, _, ct) =>
+                            {
+                                var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                                var seeder = sp.GetRequiredService<IRoleSeeder>();
+                                await seeder.SeedAsync(roleManager, ct);
+                            }))
+
                     .AddScoped<ITransactionHandler, TransactionHandler>()
                     .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                     .AddScoped<DbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
