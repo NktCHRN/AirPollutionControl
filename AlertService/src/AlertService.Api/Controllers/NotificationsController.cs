@@ -1,6 +1,9 @@
 ﻿using AlertService.Api.Contracts.Enums;
+using AlertService.Api.Contracts.Requests.Notifications;
 using AlertService.Api.Contracts.Responses.Notifications;
 using AlertService.Application.Features.Notifications.GetPaged;
+using AlertService.Application.Features.Notifications.MarkAllAsRead;
+using AlertService.Application.Features.Notifications.UpdateIsRead;
 using AspNetCore.Contracts;
 using AspNetCore.Controllers;
 using MediatR;
@@ -44,5 +47,32 @@ public class NotificationsController : BaseController
                 IsRead = c.IsRead
             }), 
             dto.TotalCount));
+    }
+
+    [HttpPut("{notificationId:guid}/isRead")]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateIsRead(Guid notificationId, [FromBody] UpdateIsReadRequest request)
+    {
+        var command = new UpdateIsReadCommand { IsRead = request.IsRead, NotificationId = notificationId };
+
+        await mediator.Send(command);
+
+        return NoContentResponse();
+    }
+
+    [HttpPut("isRead")]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> MarkAllAsRead()
+    {
+        var command = new MarkAllAsReadCommand();
+
+        await mediator.Send(command);
+
+        return NoContentResponse();
     }
 }
