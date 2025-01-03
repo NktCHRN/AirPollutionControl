@@ -11,7 +11,7 @@
 	  <PackageProjectUrl></PackageProjectUrl>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/NktCHRN/AirPollutionControl.Backend</RepositoryUrl>
-	  <Version>1.0.6</Version>
+	  <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>

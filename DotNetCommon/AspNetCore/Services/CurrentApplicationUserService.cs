@@ -50,4 +50,15 @@ public class CurrentApplicationUserService : ICurrentApplicationUserService
     {
         return _httpContextAccessor.HttpContext?.User?.IsInRole(role) is true;
     }
+
+    public IReadOnlyCollection<string> GetRoles()
+    {
+        var user = _httpContextAccessor.HttpContext?.User;
+        if (user is null)
+        {
+            return [];
+        }    
+
+        return user.FindAll(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+    }
 }

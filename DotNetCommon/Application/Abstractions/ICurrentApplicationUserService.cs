@@ -13,4 +13,5 @@ public interface ICurrentApplicationUserService
     bool IsConfirmed { get; }
     bool IsRestricted { get; }
     bool IsInRole(string role);
+    IReadOnlyCollection<string> GetRoles();
 }

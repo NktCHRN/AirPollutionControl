@@ -1,6 +1,7 @@
 ﻿using AccountService.Api.Contracts.Requests.User;
 using AccountService.Api.Contracts.Responses.User;
 using AccountService.Application.Features.User.Get;
+using AccountService.Application.Features.User.GetRoles;
 using AccountService.Application.Features.User.Login;
 using AccountService.Application.Features.User.RefreshTokens;
 using AccountService.Application.Features.User.Register;
@@ -144,5 +145,20 @@ public class UserController : BaseController
             PositionName = dto.PositionName,
             OrganizationName = dto.OrganizationName
         });
+    }
+
+    [Authorize]
+    [HttpGet("roles")]
+    [ProducesResponseType(typeof(ApiResponse<string[]>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetRoles()
+    {
+        var command = new GetUserRolesQuery();
+
+        var dto = await mediator.Send(command);
+
+        return OkResponse(dto.Roles);
     }
 }
