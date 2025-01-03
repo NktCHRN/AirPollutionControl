@@ -10,7 +10,8 @@ public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand
             .WithMessage("Either phone number or email must not be empty");
 
         RuleFor(c => c.Email)
-            .EmailAddress();
+            .EmailAddress()
+            .When(c => !string.IsNullOrEmpty(c.Email));
 
         RuleFor(c => c.PhoneNumber)
             .Length(5, 15)
