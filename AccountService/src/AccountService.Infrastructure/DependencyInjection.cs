@@ -14,6 +14,7 @@ using AccountService.Infrastructure.Abstractions;
 using AccountService.Infrastructure.Seeders;
 using AccountService.Infrastructure.TokensProviders;
 using AccountService.Application.Abstractions;
+using AccountService.Infrastructure.Messaging;
 
 namespace AccountService.Infrastructure;
 public static class DependencyInjection
@@ -23,7 +24,8 @@ public static class DependencyInjection
         return services.AddDatabase(configuration)
             .AddIdentityServices(configuration)
             .AddSingleton(TimeProvider.System)
-            .Configure((Action<JsonSerializerOptions>)(opt => opt.Converters.Add(new JsonStringEnumConverter())));
+            .Configure((Action<JsonSerializerOptions>)(opt => opt.Converters.Add(new JsonStringEnumConverter())))
+            .AddScoped<IMessagingService, MessagingService>();
     }
 
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)

@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using AspNetCore.Services;
 using Application.Abstractions;
 using AspNetCore;
+using MassTransit;
+using AccountService.Infrastructure.Persistence;
 
 namespace AccountService.Api;
 
@@ -14,6 +16,8 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddSingleton<ICurrentApplicationUserService, CurrentApplicationUserService>();
+
+        services.AddMassTransitCustom(configuration);
 
         services.AddAuth(configuration);
 
@@ -33,5 +37,44 @@ public static class DependencyInjection
             .AllowAnyHeader()));
 
         return services;
+    }
+
+    private static IServiceCollection AddMassTransitCustom(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services
+            .Configure<RabbitMqTransportOptions>(configuration.GetRequiredSection("RabbitMQ"))
+            .AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
+            {
+                // configure which database lock provider to use (Postgres, SqlServer, or MySql)
+                o.UsePostgres();
+
+                o.QueryDelay = TimeSpan.FromSeconds(1);
+                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
+
+                // enable the bus outbox
+                o.UseBusOutbox();
+            });
+
+            x.SetInMemorySagaRepositoryProvider();
+
+            x.AddConsumersFromNamespaceContaining<IApiMarker>();
+            x.AddSagaStateMachinesFromNamespaceContaining<IApiMarker>();
+            x.AddSagasFromNamespaceContaining<IApiMarker>();
+            x.AddActivitiesFromNamespaceContaining<IApiMarker>();
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.ConfigureEndpoints(context);
+            });
+
+            x.AddConfigureEndpointsCallback((context, name, cfg) =>
+            {
+                cfg.UseEntityFrameworkOutbox<ApplicationDbContext>(context);
+            });
+        });
     }
 }

@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using DomainAbstractions.Services;
 using Microsoft.EntityFrameworkCore;
+using AccountService.Domain.Events;
 
 namespace AccountService.Application.Features.User.Register;
 public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegisteredDto>
@@ -71,6 +72,9 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, UserRegis
         {
             throw new EntityValidationFailedException(IdentityUtilities.IdentityFailuresToString(userCreationResults.Errors));
         }
+
+        user.AddDomainEvent(new UserCreatedDomainEvent { UserId = user.Id });
+        await userManager.UpdateAsync(user);
 
         return new UserRegisteredDto(user.Id, UserAccountService.GetFullName(user.FirstName, user.MiddleName, user.LastName, user.Patronymic), user.Email, user.PhoneNumber);
     }

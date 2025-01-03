@@ -12,5 +12,5 @@ public sealed record UserCreated
     public string? RestrictionNote { get; set; }
     public DateTimeOffset? RestrictionEnd { get; set; }
     public string? PositionName { get; set; }
-    public Guid AgglomerationId { get; set; }
+    public Guid? AgglomerationId { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using AccountService.Domain.Models;
 using Database;
 using DomainAbstractions;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,5 +24,9 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
         modelBuilder.Ignore<BaseDomainEvent>();
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IInfrastructureMarker))!);
         modelBuilder.ApplySoftDeleteFilter();
+
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
+        modelBuilder.AddOutboxStateEntity();
     }
 }
