@@ -373,7 +373,7 @@ namespace AlertService.Infrastructure.Migrations
             modelBuilder.Entity("AlertService.Domain.Models.UserNotification", b =>
                 {
                     b.HasOne("AlertService.Domain.Models.Notification", "Notification")
-                        .WithMany()
+                        .WithMany("UserNotifications")
                         .HasForeignKey("NotificationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -404,6 +404,11 @@ namespace AlertService.Infrastructure.Migrations
             modelBuilder.Entity("AlertService.Domain.Models.Country", b =>
                 {
                     b.Navigation("Agglomerations");
+                });
+
+            modelBuilder.Entity("AlertService.Domain.Models.Notification", b =>
+                {
+                    b.Navigation("UserNotifications");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,6 +14,8 @@ public class Notification : ISoftDeletable, IEntityWithEvents
     public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 
+    public IList<UserNotification> UserNotifications { get; set; } = [];
+
     private readonly List<BaseDomainEvent> domainEvents = [];
     public IReadOnlyCollection<BaseDomainEvent> DomainEvents => domainEvents;
     public void AddDomainEvent(BaseDomainEvent domainEvent)

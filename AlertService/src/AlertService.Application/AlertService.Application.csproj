@@ -17,8 +17,4 @@
     <ProjectReference Include="..\AlertService.Domain\AlertService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\NotificationsAdmin\" />
-  </ItemGroup>
-
 </Project>
